@@ -6,7 +6,8 @@
 <meta name="theme-color" content="#000000">
 <title>Text</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #000; }
+  html { background: #000; }
+  body { margin: 0; min-height: 100vh; min-height: 100dvh; background: #000; }
   body {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 18px; padding: 24px 16px; box-sizing: border-box;
@@ -31,11 +32,34 @@
 </style>
 </head>
 <body>
-<div id="box">Edit only the two date labels in this image. Change the upper date "29.09.2026." to "02.10.2026." and the lower date "29.09.26" to "30.09.26".
+<div id="box">Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat gray background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
-Match the original exactly: same monospaced typewriter-style font, same character size, letter spacing, stroke thickness, ink color and slight print softness. Keep the small light-gray paper patch behind each date unchanged, including its texture, color and edges. Keep the position of both dates identical.
+In the upper part of the image, two strips overlap:
 
-Do not change anything else: the black background must stay pixel-identical.</div>
+Label A – the right strip: lighter, almost white, slightly higher, lying on top of Label B.
+"28.09.2026" → "29.09.2026"
+Only the day changes (28 → 29). No dot at the end.
+
+Label B – the left strip: darker gray, slightly lower, its right end hidden under Label A.
+"29.09.2026." → "02.10.2026."
+Day 29 → 02, month 09 → 10. Keep the dot at the end.
+
+Further down, in the middle of the image:
+
+Label C – the single small gray strip.
+"29.09.26" → "30.09.26"
+Only the day changes (29 → 30). Keep the two-digit year, no dot at the end.
+
+Each label keeps exactly the same number of characters. Replace the digits in place: every character, including the dots, stays in exactly the same spot on its strip.
+
+Font: copy the existing digits exactly – a thin, monospaced typewriter-style font in dark gray, with even letter spacing and slightly soft edges. The digits "1" and "3" do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.
+
+Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat gray background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
+
+Final check – the result must read exactly:
+Label A (upper right strip, light): "29.09.2026"
+Label B (upper left strip, darker): "02.10.2026."
+Label C (small strip further down): "30.09.26"</div>
 <button id="kopieren" type="button" aria-label="Text kopieren"><img src="copy.jpg" alt="Copy"></button>
 <div id="hinweis">Kopiert</div>
 <script>
