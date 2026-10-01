@@ -14,6 +14,13 @@
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
   }
+  html { color-scheme: dark; }
+  #datum { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  #tag {
+    font: inherit; font-size: 17px; color: #4a9eff; background: #1c1c1e;
+    border: 0; border-radius: 10px; padding: 7px 14px; min-height: 36px;
+  }
+  #ableitung { color: #5f5f5f; font-size: 10px; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
   #box {
     width: 100%; max-width: 340px; box-sizing: border-box;
     padding: 12px 14px; border: 1px solid #262626; border-radius: 10px;
@@ -32,6 +39,10 @@
 </style>
 </head>
 <body>
+<div id="datum">
+  <input id="tag" type="date" value="2026-10-02" aria-label="Datum">
+  <div id="ableitung"></div>
+</div>
 <div id="box">Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat gray background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
 In the upper part of the image, two strips overlap:
@@ -73,6 +84,74 @@ Label C (small strip further down): "30.09.26"</div>
     let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
     t.remove(); return ok;
   }
+
+  /* Datum oben: das native Apple-Datumsfeld setzt das neue Datum von Label B.
+     A und C behalten ihren Abstand zu B (A = B minus 3 Tage, C = B minus 2 Tage).
+     Die alten Werte sind das, was im Bild steht, und bleiben fest. */
+  const ALT = { A: '28.09.2026', B: '29.09.2026.', C: '29.09.26' };
+  const ABSTAND = { A: -3, C: -2 };
+  const z2 = (n) => String(n).padStart(2, '0');
+  function plus(d, tage) { const x = new Date(d); x.setDate(x.getDate() + tage); return x; }
+  function lang(d) { return `${z2(d.getDate())}.${z2(d.getMonth() + 1)}.${d.getFullYear()}`; }
+  function kurz(d) { return `${z2(d.getDate())}.${z2(d.getMonth() + 1)}.${String(d.getFullYear()).slice(2)}`; }
+  function teile(s) { const [d, m, j] = s.replace(/\.$/, '').split('.'); return { day: d, month: m, year: j }; }
+  function aenderung(alt, neu) {
+    const a = teile(alt), n = teile(neu), w = [];
+    for (const k of ['day', 'month', 'year']) if (a[k] !== n[k]) w.push([k, a[k], n[k]]);
+    if (!w.length) return 'Nothing changes on this label.';
+    if (w.length === 1) return `Only the ${w[0][0]} changes (${w[0][1]} → ${w[0][2]}).`;
+    const s = w.map(([k, x, y]) => `${k} ${x} → ${y}`).join(', ');
+    return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+  }
+  function liste(xs) { const q = xs.map((x) => `"${x}"`); return q.length < 2 ? q[0] : q.slice(0, -1).join(', ') + ' and ' + q[q.length - 1]; }
+  function text(b) {
+    const NEU = { A: lang(plus(b, ABSTAND.A)), B: lang(b) + '.', C: kurz(plus(b, ABSTAND.C)) };
+    const alt = new Set(Object.values(ALT).join('').replace(/\D/g, ''));
+    const neuZ = [...new Set(Object.values(NEU).join('').replace(/\D/g, ''))].filter((c) => !alt.has(c)).sort();
+    const ziffern = !neuZ.length ? '' : neuZ.length === 1
+      ? ` The digit ${liste(neuZ)} does not appear anywhere in the image yet; draw it in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`
+      : ` The digits ${liste(neuZ)} do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`;
+    return { NEU, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat gray background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+
+In the upper part of the image, two strips overlap:
+
+Label A – the right strip: lighter, almost white, slightly higher, lying on top of Label B.
+"${ALT.A}" → "${NEU.A}"
+${aenderung(ALT.A, NEU.A)} No dot at the end.
+
+Label B – the left strip: darker gray, slightly lower, its right end hidden under Label A.
+"${ALT.B}" → "${NEU.B}"
+${aenderung(ALT.B, NEU.B)} Keep the dot at the end.
+
+Further down, in the middle of the image:
+
+Label C – the single small gray strip.
+"${ALT.C}" → "${NEU.C}"
+${aenderung(ALT.C, NEU.C)} Keep the two-digit year, no dot at the end.
+
+Each label keeps exactly the same number of characters. Replace the digits in place: every character, including the dots, stays in exactly the same spot on its strip.
+
+Font: copy the existing digits exactly – a thin, monospaced typewriter-style font in dark gray, with even letter spacing and slightly soft edges.${ziffern}
+
+Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat gray background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
+
+Final check – the result must read exactly:
+Label A (upper right strip, light): "${NEU.A}"
+Label B (upper left strip, darker): "${NEU.B}"
+Label C (small strip further down): "${NEU.C}"` };
+  }
+  const tag = document.getElementById('tag');
+  const ableitung = document.getElementById('ableitung');
+  function neuBauen() {
+    if (!tag.value) return;
+    const [j, m, d] = tag.value.split('-').map(Number);
+    const r = text(new Date(j, m - 1, d));
+    box.textContent = r.t;
+    ableitung.textContent = `A ${r.NEU.A} · B ${r.NEU.B} · C ${r.NEU.C}`;
+  }
+  tag.addEventListener('input', neuBauen);
+  tag.addEventListener('change', neuBauen);
+  neuBauen();
   document.getElementById('kopieren').addEventListener('click', async () => {
     const text = box.textContent;
     try { await navigator.clipboard.writeText(text); zeigen(); }
