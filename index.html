@@ -53,7 +53,7 @@
   <div id="steuer">
     <input id="tag" type="date" value="2026-10-02" aria-label="Datum">
     <select id="zahl" aria-label="Zahl">
-      <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
+      <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option selected>7</option>
     </select>
   </div>
   <div id="ableitung"></div>
@@ -159,8 +159,16 @@ Label C (small strip further down): "${NEU.C}"` };
   const tag = document.getElementById('tag');
   const zahl = document.getElementById('zahl');
   const ableitung = document.getElementById('ableitung');
-  const heute = new Date();
-  tag.value = `${heute.getFullYear()}-${z2(heute.getMonth() + 1)}-${z2(heute.getDate())}`;
+  /* Standard: heutiges Datum und Zahl 7. Vom Home-Bildschirm holt das iPhone die Seite oft aus dem
+     Speicher, ohne neu zu laden; deshalb wird beim Zurueckkommen an einem neuen Tag neu gesetzt. */
+  const heuteIso = () => { const h = new Date(); return `${h.getFullYear()}-${z2(h.getMonth() + 1)}-${z2(h.getDate())}`; };
+  let gesetztAm = '';
+  function standard() { gesetztAm = heuteIso(); tag.value = gesetztAm; zahl.value = '7'; }
+  standard();
+  function neuerTag() { if (heuteIso() !== gesetztAm) { standard(); neuBauen(); } }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) neuerTag(); });
+  window.addEventListener('pageshow', neuerTag);
+  window.addEventListener('focus', neuerTag);
   function neuBauen() {
     if (!tag.value) return;
     const [j, m, d] = tag.value.split('-').map(Number);
