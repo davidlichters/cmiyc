@@ -58,34 +58,35 @@
   </div>
   <div id="ableitung"></div>
 </div>
-<div id="box">Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+<div id="box">Edit this image with minimal changes. It shows three typed dates. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
-In the upper part of the image, two strips overlap:
+In the upper part of the image, there are two dates:
 
-Label A – the right strip: lighter, almost white, slightly higher, lying on top of Label B.
-"28.09.2026" → "29.09.2026"
-Only the day changes (28 → 29). No dot at the end.
+Date A – the right date
+slightly higher than Label B.
+"28.09.2026" → "28.09.2026"
+Nothing changes on this label. No dot at the end.
 
-Label B – the left strip: darker gray, slightly lower, its right end hidden under Label A.
-"29.09.2026." → "02.10.2026."
-Day 29 → 02, month 09 → 10. Keep the dot at the end.
+Date B – the left date: slightly lower than Label A.
+"29.09.2026." → "01.10.2026."
+Day 29 → 01, month 09 → 10. Keep the dot at the end.
 
 Further down, in the middle of the image:
 
-Label C – the single small gray strip.
+Date C
 "29.09.26" → "30.09.26"
 Only the day changes (29 → 30). Keep the two-digit year, no dot at the end.
 
-Each label keeps exactly the same number of characters. Replace the digits in place: every character, including the dots, stays in exactly the same spot on its strip.
+Each date keeps exactly the same number of characters. Replace the digits in place: every character, including the dots, stays in exactly the same spot.
 
 Font: copy the existing digits exactly – a thin, monospaced typewriter-style font in dark gray, with even letter spacing and slightly soft edges. The digits "1" and "3" do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.
 
-Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat black background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
+Keep identical: the size, shape, color, paper texture and grain of every part and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
 
 Final check – the result must read exactly:
-Label A (upper right strip, light): "29.09.2026"
-Label B (upper left strip, darker): "02.10.2026."
-Label C (small strip further down): "30.09.26"</div>
+Date A (upper right strip, light): "28.09.2026"
+Date B (upper left strip, darker): "01.10.2026."
+Date C (small strip further down): "30.09.26"</div>
 <button id="kopieren" type="button" aria-label="Text kopieren"><img src="copy.jpg" alt="Copy"></button>
 <div id="hinweis">Kopiert</div>
 <script>
@@ -127,34 +128,35 @@ Label C (small strip further down): "30.09.26"</div>
     const ziffern = !neuZ.length ? '' : neuZ.length === 1
       ? ` The digit ${liste(neuZ)} does not appear anywhere in the image yet; draw it in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`
       : ` The digits ${liste(neuZ)} do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`;
-    return { NEU, anzeige: `${wochentag(a)}          -          ${wochentag(plus(a, zahl - 1))}`, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+    return { NEU, anzeige: `${wochentag(a)}          -          ${wochentag(plus(a, zahl - 1))}`, t: `Edit this image with minimal changes. It shows three typed dates. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
-In the upper part of the image, two strips overlap:
+In the upper part of the image, there are two dates:
 
-Label A – the right strip: lighter, almost white, slightly higher, lying on top of Label B.
+Date A – the right date
+slightly higher than Label B.
 "${ALT.A}" → "${NEU.A}"
 ${aenderung(ALT.A, NEU.A)} No dot at the end.
 
-Label B – the left strip: darker gray, slightly lower, its right end hidden under Label A.
+Date B – the left date: slightly lower than Label A.
 "${ALT.B}" → "${NEU.B}"
 ${aenderung(ALT.B, NEU.B)} Keep the dot at the end.
 
 Further down, in the middle of the image:
 
-Label C – the single small gray strip.
+Date C
 "${ALT.C}" → "${NEU.C}"
 ${aenderung(ALT.C, NEU.C)} Keep the two-digit year, no dot at the end.
 
-Each label keeps exactly the same number of characters. Replace the digits in place: every character, including the dots, stays in exactly the same spot on its strip.
+Each date keeps exactly the same number of characters. Replace the digits in place: every character, including the dots, stays in exactly the same spot.
 
 Font: copy the existing digits exactly – a thin, monospaced typewriter-style font in dark gray, with even letter spacing and slightly soft edges.${ziffern}
 
-Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat black background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
+Keep identical: the size, shape, color, paper texture and grain of every part and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
 
 Final check – the result must read exactly:
-Label A (upper right strip, light): "${NEU.A}"
-Label B (upper left strip, darker): "${NEU.B}"
-Label C (small strip further down): "${NEU.C}"` };
+Date A (upper right strip, light): "${NEU.A}"
+Date B (upper left strip, darker): "${NEU.B}"
+Date C (small strip further down): "${NEU.C}"` };
   }
   const tag = document.getElementById('tag');
   const zahl = document.getElementById('zahl');
