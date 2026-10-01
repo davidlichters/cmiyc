@@ -100,6 +100,8 @@ Label C (small strip further down): "30.09.26"</div>
   const ALT = { A: '28.09.2026', B: '29.09.2026.', C: '29.09.26' };
   const z2 = (n) => String(n).padStart(2, '0');
   function plus(d, tage) { const x = new Date(d); x.setDate(x.getDate() + tage); return x; }
+  const TAGE = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  function wochentag(d) { return `${TAGE[d.getDay()]} ${z2(d.getDate())}-${z2(d.getMonth() + 1)}-${d.getFullYear()}`; }
   function lang(d) { return `${z2(d.getDate())}.${z2(d.getMonth() + 1)}.${d.getFullYear()}`; }
   function kurz(d) { return `${z2(d.getDate())}.${z2(d.getMonth() + 1)}.${String(d.getFullYear()).slice(2)}`; }
   function teile(s) { const [d, m, j] = s.replace(/\.$/, '').split('.'); return { day: d, month: m, year: j }; }
@@ -119,7 +121,7 @@ Label C (small strip further down): "30.09.26"</div>
     const ziffern = !neuZ.length ? '' : neuZ.length === 1
       ? ` The digit ${liste(neuZ)} does not appear anywhere in the image yet; draw it in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`
       : ` The digits ${liste(neuZ)} do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`;
-    return { NEU, anzeige: `${a.getDate()}.${a.getMonth() + 1} bis ${plus(a, Math.min(2, zahl - 1)).getDate()}.${plus(a, Math.min(2, zahl - 1)).getMonth() + 1}`, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+    return { NEU, anzeige: `${wochentag(a)} bis ${wochentag(plus(a, zahl - 1))}`, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
 In the upper part of the image, two strips overlap:
 
