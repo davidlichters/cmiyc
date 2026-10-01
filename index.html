@@ -30,7 +30,7 @@
   }
   #tag::-webkit-date-and-time-value { text-align: center; }
   #zahl { width: 44px; height: 44px; padding: 0; border-radius: 50%; text-align: center; text-align-last: center; }
-  #ableitung { color: #5f5f5f; font-size: 9.5px; text-align: center; white-space: pre-line; line-height: 1.5; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+  #ableitung { color: #5f5f5f; font-size: 9.5px; text-align: center; white-space: pre; line-height: 1.5; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
   #box {
     width: 100%; max-width: 340px; box-sizing: border-box;
     padding: 12px 14px; border: 1px solid #262626; border-radius: 10px; background: #1c1c1e;
@@ -127,7 +127,7 @@ Label C (small strip further down): "30.09.26"</div>
     const ziffern = !neuZ.length ? '' : neuZ.length === 1
       ? ` The digit ${liste(neuZ)} does not appear anywhere in the image yet; draw it in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`
       : ` The digits ${liste(neuZ)} do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`;
-    return { NEU, anzeige: `${wochentag(a)}\n-\n${wochentag(plus(a, zahl - 1))}`, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+    return { NEU, anzeige: `${wochentag(a)}          -          ${wochentag(plus(a, zahl - 1))}`, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
 In the upper part of the image, two strips overlap:
 
