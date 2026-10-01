@@ -9,8 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" type="image/png" href="../icon-512.png">
 <style>
   html { background: #000; }
   body { margin: 0; position: fixed; inset: 0; overflow: hidden; overscroll-behavior: none; touch-action: manipulation; background: #000; }
@@ -60,17 +60,17 @@
 </div>
 <div id="box">Edit this image with minimal changes. It shows three typed dates. Treat this as a precise retouch of a few digits, not a redraw of the image. Do not add any letters, words, labels, names or new text anywhere in the image; only existing digits are replaced. Everything not listed below stays exactly as it is.
 
-In the upper part of the image, there are two dates:
+All three dates are stacked on top of each other: top, middle, bottom.
 
-The upper right date: slightly higher than the left date.
+The top date:
 "28.09.2026" → "28.09.2026"
 Nothing changes on this date. No dot at the end.
 
-The upper left date: slightly lower than the right date.
+The middle date:
 "29.09.2026." → "01.10.2026."
 Day 29 → 01, month 09 → 10. Keep the dot at the end.
 
-The lower date (further down, in the middle):
+The bottom date:
 "29.09.26" → "30.09.26"
 Only the day changes (29 → 30). Keep the two-digit year, no dot at the end.
 
@@ -82,10 +82,10 @@ Keep identical: the size, shape, color, paper texture and grain of every part an
 
 Final check – the result must read exactly:
 Very top right corner is always "10.01.2010"
-Upper right date: "28.09.2026"
-Upper left date: "01.10.2026."
-Lower date: "30.09.26"</div>
-<button id="kopieren" type="button" aria-label="Text kopieren"><img src="copy.jpg" alt="Copy"></button>
+Top date: "28.09.2026"
+Middle date: "01.10.2026."
+Bottom date: "30.09.26"</div>
+<button id="kopieren" type="button" aria-label="Text kopieren"><img src="../copy.jpg" alt="Copy"></button>
 <div id="hinweis">Kopiert</div>
 <script>
   const box = document.getElementById('box');
@@ -128,17 +128,17 @@ Lower date: "30.09.26"</div>
       : ` The digits ${liste(neuZ)} do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`;
     return { NEU, anzeige: `${wochentag(a)}          -          ${wochentag(plus(a, zahl - 1))}`, t: `Edit this image with minimal changes. It shows three typed dates. Treat this as a precise retouch of a few digits, not a redraw of the image. Do not add any letters, words, labels, names or new text anywhere in the image; only existing digits are replaced. Everything not listed below stays exactly as it is.
 
-In the upper part of the image, there are two dates:
+All three dates are stacked on top of each other: top, middle, bottom.
 
-The upper right date: slightly higher than the left date.
+The top date:
 "${ALT.A}" → "${NEU.A}"
 ${aenderung(ALT.A, NEU.A)} No dot at the end.
 
-The upper left date: slightly lower than the right date.
+The middle date:
 "${ALT.B}" → "${NEU.B}"
 ${aenderung(ALT.B, NEU.B)} Keep the dot at the end.
 
-The lower date (further down, in the middle):
+The bottom date:
 "${ALT.C}" → "${NEU.C}"
 ${aenderung(ALT.C, NEU.C)} Keep the two-digit year, no dot at the end.
 
@@ -150,9 +150,9 @@ Keep identical: the size, shape, color, paper texture and grain of every part an
 
 Final check – the result must read exactly:
 Very top right corner is always "10.01.2010"
-Upper right date: "${NEU.A}"
-Upper left date: "${NEU.B}"
-Lower date: "${NEU.C}"` };
+Top date: "${NEU.A}"
+Middle date: "${NEU.B}"
+Bottom date: "${NEU.C}"` };
   }
   const tag = document.getElementById('tag');
   const zahl = document.getElementById('zahl');
