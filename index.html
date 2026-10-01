@@ -19,12 +19,12 @@
   #steuer { display: flex; gap: 10px; align-items: center; justify-content: center; }
   #tag, #zahl {
     font: inherit; font-size: 17px; color: #4a9eff; background: #1c1c1e;
-    border: 0; border-radius: 999px; padding: 7px 20px; min-height: 36px;
+    border: 0; border-radius: 999px; padding: 0 20px; height: 44px; box-sizing: border-box;
     -webkit-appearance: none; appearance: none; text-align: center; line-height: 22px;
   }
   #tag::-webkit-date-and-time-value { text-align: center; }
-  #zahl { padding: 7px 18px; text-align: center; text-align-last: center; }
-  #ableitung { color: #5f5f5f; font-size: 10px; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+  #zahl { width: 44px; height: 44px; padding: 0; border-radius: 50%; text-align: center; text-align-last: center; }
+  #ableitung { color: #5f5f5f; font-size: 11px; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
   #box {
     width: 100%; max-width: 340px; box-sizing: border-box;
     padding: 12px 14px; border: 1px solid #262626; border-radius: 10px;
@@ -52,7 +52,7 @@
   </div>
   <div id="ableitung"></div>
 </div>
-<div id="box">Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat gray background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+<div id="box">Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
 In the upper part of the image, two strips overlap:
 
@@ -74,7 +74,7 @@ Each label keeps exactly the same number of characters. Replace the digits in pl
 
 Font: copy the existing digits exactly – a thin, monospaced typewriter-style font in dark gray, with even letter spacing and slightly soft edges. The digits "1" and "3" do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.
 
-Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat gray background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
+Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat black background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
 
 Final check – the result must read exactly:
 Label A (upper right strip, light): "29.09.2026"
@@ -94,8 +94,8 @@ Label C (small strip further down): "30.09.26"</div>
     t.remove(); return ok;
   }
 
-  /* Datum oben = Label A. C liegt immer 2 Tage danach. B liegt (Zahl minus 1) Tage nach A:
-     Zahl 1 = gleicher Tag wie A, Zahl 2 = 1 Tag spaeter, Zahl 7 = 6 Tage spaeter (Davids Regel, 01.10.2026).
+  /* Datum oben = Label A. B liegt (Zahl minus 1) Tage nach A. C liegt 2 Tage nach A,
+     ausser bei Zahl 2 (1 Tag) und Zahl 1 (gleicher Tag). Davids Regel, 01.10.2026.
      Die alten Werte sind das, was im Bild steht, und bleiben fest. */
   const ALT = { A: '28.09.2026', B: '29.09.2026.', C: '29.09.26' };
   const z2 = (n) => String(n).padStart(2, '0');
@@ -113,13 +113,13 @@ Label C (small strip further down): "30.09.26"</div>
   }
   function liste(xs) { const q = xs.map((x) => `"${x}"`); return q.length < 2 ? q[0] : q.slice(0, -1).join(', ') + ' and ' + q[q.length - 1]; }
   function text(a, zahl) {
-    const NEU = { A: lang(a), B: lang(plus(a, zahl - 1)) + '.', C: kurz(plus(a, 2)) };
+    const NEU = { A: lang(a), B: lang(plus(a, zahl - 1)) + '.', C: kurz(plus(a, Math.min(2, zahl - 1))) };
     const alt = new Set(Object.values(ALT).join('').replace(/\D/g, ''));
     const neuZ = [...new Set(Object.values(NEU).join('').replace(/\D/g, ''))].filter((c) => !alt.has(c)).sort();
     const ziffern = !neuZ.length ? '' : neuZ.length === 1
       ? ` The digit ${liste(neuZ)} does not appear anywhere in the image yet; draw it in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`
       : ` The digits ${liste(neuZ)} do not appear anywhere in the image yet; draw them in exactly the same style, height, stroke width and spacing, as if typed by the same machine.`;
-    return { NEU, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat gray background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
+    return { NEU, anzeige: `${a.getDate()}.${a.getMonth() + 1} bis ${plus(a, Math.min(2, zahl - 1)).getDate()}.${plus(a, Math.min(2, zahl - 1)).getMonth() + 1}`, t: `Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat black background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
 
 In the upper part of the image, two strips overlap:
 
@@ -141,7 +141,7 @@ Each label keeps exactly the same number of characters. Replace the digits in pl
 
 Font: copy the existing digits exactly – a thin, monospaced typewriter-style font in dark gray, with even letter spacing and slightly soft edges.${ziffern}
 
-Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat gray background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
+Keep identical: the size, shape, color, paper texture and grain of every strip, the way Label A overlaps Label B, the flat black background, the empty areas, and the image size, aspect ratio and framing. No sharpening, cleanup, cropping, zooming, shadows, borders or extra text.
 
 Final check – the result must read exactly:
 Label A (upper right strip, light): "${NEU.A}"
@@ -158,7 +158,7 @@ Label C (small strip further down): "${NEU.C}"` };
     const [j, m, d] = tag.value.split('-').map(Number);
     const r = text(new Date(j, m - 1, d), Number(zahl.value));
     box.textContent = r.t;
-    ableitung.textContent = `A ${r.NEU.A} · B ${r.NEU.B} · C ${r.NEU.C}`;
+    ableitung.textContent = r.anzeige;
   }
   tag.addEventListener('input', neuBauen);
   tag.addEventListener('change', neuBauen);
