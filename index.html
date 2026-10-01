@@ -7,7 +7,7 @@
 <title>Text</title>
 <style>
   html { background: #000; }
-  body { margin: 0; min-height: 100vh; min-height: 100dvh; background: #000; }
+  body { margin: 0; position: fixed; inset: 0; overflow: hidden; overscroll-behavior: none; touch-action: manipulation; background: #000; }
   body {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 18px; padding: 24px 16px; box-sizing: border-box;
@@ -16,17 +16,19 @@
   }
   html { color-scheme: dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   #datum { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-  #tag {
+  #steuer { display: flex; gap: 10px; align-items: center; justify-content: center; }
+  #tag, #zahl {
     font: inherit; font-size: 17px; color: #4a9eff; background: #1c1c1e;
     border: 0; border-radius: 999px; padding: 7px 20px; min-height: 36px;
     -webkit-appearance: none; appearance: none; text-align: center; line-height: 22px;
   }
   #tag::-webkit-date-and-time-value { text-align: center; }
+  #zahl { padding: 7px 18px; text-align: center; text-align-last: center; }
   #ableitung { color: #5f5f5f; font-size: 10px; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
   #box {
     width: 100%; max-width: 340px; box-sizing: border-box;
     padding: 12px 14px; border: 1px solid #262626; border-radius: 10px;
-    color: #8c8c8c; font-size: 7px; line-height: 1.45;
+    color: #fff; font-size: 6.5px; line-height: 1.45;
     white-space: pre-wrap; word-break: break-word;
     -webkit-user-select: text; user-select: text;
   }
@@ -42,7 +44,12 @@
 </head>
 <body>
 <div id="datum">
-  <input id="tag" type="date" value="2026-10-02" aria-label="Datum">
+  <div id="steuer">
+    <input id="tag" type="date" value="2026-10-02" aria-label="Datum">
+    <select id="zahl" aria-label="Zahl">
+      <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
+    </select>
+  </div>
   <div id="ableitung"></div>
 </div>
 <div id="box">Edit this image with minimal changes. It shows three small paper strips with typed dates on a plain, flat gray background – nothing else. Treat this as a precise retouch of a few digits, not a redraw of the image. Everything not listed below stays exactly as it is.
