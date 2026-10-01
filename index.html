@@ -94,11 +94,10 @@ Label C (small strip further down): "30.09.26"</div>
     t.remove(); return ok;
   }
 
-  /* Datum oben: das native Apple-Datumsfeld setzt das neue Datum von Label B.
-     A und C behalten ihren Abstand zu B (A = B minus 3 Tage, C = B minus 2 Tage).
+  /* Datum oben = Label A. C liegt immer 2 Tage danach. B liegt (Zahl minus 1) Tage nach A:
+     Zahl 1 = gleicher Tag wie A, Zahl 2 = 1 Tag spaeter, Zahl 7 = 6 Tage spaeter (Davids Regel, 01.10.2026).
      Die alten Werte sind das, was im Bild steht, und bleiben fest. */
   const ALT = { A: '28.09.2026', B: '29.09.2026.', C: '29.09.26' };
-  const ABSTAND = { A: -3, C: -2 };
   const z2 = (n) => String(n).padStart(2, '0');
   function plus(d, tage) { const x = new Date(d); x.setDate(x.getDate() + tage); return x; }
   function lang(d) { return `${z2(d.getDate())}.${z2(d.getMonth() + 1)}.${d.getFullYear()}`; }
@@ -113,8 +112,8 @@ Label C (small strip further down): "30.09.26"</div>
     return s.charAt(0).toUpperCase() + s.slice(1) + '.';
   }
   function liste(xs) { const q = xs.map((x) => `"${x}"`); return q.length < 2 ? q[0] : q.slice(0, -1).join(', ') + ' and ' + q[q.length - 1]; }
-  function text(b) {
-    const NEU = { A: lang(plus(b, ABSTAND.A)), B: lang(b) + '.', C: kurz(plus(b, ABSTAND.C)) };
+  function text(a, zahl) {
+    const NEU = { A: lang(a), B: lang(plus(a, zahl - 1)) + '.', C: kurz(plus(a, 2)) };
     const alt = new Set(Object.values(ALT).join('').replace(/\D/g, ''));
     const neuZ = [...new Set(Object.values(NEU).join('').replace(/\D/g, ''))].filter((c) => !alt.has(c)).sort();
     const ziffern = !neuZ.length ? '' : neuZ.length === 1
@@ -150,16 +149,20 @@ Label B (upper left strip, darker): "${NEU.B}"
 Label C (small strip further down): "${NEU.C}"` };
   }
   const tag = document.getElementById('tag');
+  const zahl = document.getElementById('zahl');
   const ableitung = document.getElementById('ableitung');
+  const heute = new Date();
+  tag.value = `${heute.getFullYear()}-${z2(heute.getMonth() + 1)}-${z2(heute.getDate())}`;
   function neuBauen() {
     if (!tag.value) return;
     const [j, m, d] = tag.value.split('-').map(Number);
-    const r = text(new Date(j, m - 1, d));
+    const r = text(new Date(j, m - 1, d), Number(zahl.value));
     box.textContent = r.t;
     ableitung.textContent = `A ${r.NEU.A} · B ${r.NEU.B} · C ${r.NEU.C}`;
   }
   tag.addEventListener('input', neuBauen);
   tag.addEventListener('change', neuBauen);
+  zahl.addEventListener('change', neuBauen);
   neuBauen();
   document.getElementById('kopieren').addEventListener('click', async () => {
     const text = box.textContent;
