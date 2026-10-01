@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Text</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; }
+  body {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px; padding: 24px 16px; box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #box {
+    width: 100%; max-width: 340px; box-sizing: border-box;
+    padding: 12px 14px; border: 1px solid #262626; border-radius: 10px;
+    color: #8c8c8c; font-size: 9px; line-height: 1.5;
+    white-space: pre-wrap; word-break: break-word;
+    -webkit-user-select: text; user-select: text;
+  }
+  #kopieren {
+    border: 0; padding: 0; background: none; cursor: pointer;
+    transition: opacity .15s;
+  }
+  #kopieren img { display: block; width: 112px; height: auto; }
+  #kopieren:active { opacity: .5; }
+  #hinweis { color: #5f5f5f; font-size: 11px; height: 14px; margin-top: -10px; opacity: 0; transition: opacity .2s; }
+  #hinweis.an { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="box">Edit only the two date labels in this image. Change the upper date "29.09.2026." to "02.10.2026." and the lower date "29.09.26" to "30.09.26".
+
+Match the original exactly: same monospaced typewriter-style font, same character size, letter spacing, stroke thickness, ink color and slight print softness. Keep the small light-gray paper patch behind each date unchanged, including its texture, color and edges. Keep the position of both dates identical.
+
+Do not change anything else: the black background must stay pixel-identical.</div>
+<button id="kopieren" type="button" aria-label="Text kopieren"><img src="copy.jpg" alt="Copy"></button>
+<div id="hinweis">Kopiert</div>
+<script>
+  const box = document.getElementById('box');
+  const hinweis = document.getElementById('hinweis');
+  function zeigen() { hinweis.classList.add('an'); setTimeout(() => hinweis.classList.remove('an'), 1200); }
+  function ersatz(text) {
+    const t = document.createElement('textarea');
+    t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select(); t.setSelectionRange(0, text.length);
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    t.remove(); return ok;
+  }
+  document.getElementById('kopieren').addEventListener('click', async () => {
+    const text = box.textContent;
+    try { await navigator.clipboard.writeText(text); zeigen(); }
+    catch (e) { if (ersatz(text)) zeigen(); }
+  });
+</script>
+</body>
+</html>
